@@ -31,7 +31,7 @@ public class CommandParser {
             throw new IllegalArgumentException(ILLEGAL_COMMANDS);
         }
 
-        String[] lawnDimension = commands.get(0).split(" ");
+        String[] lawnDimension = commands.get(0).split("\\s+");
         if (lawnDimension.length > 2) {
             throw new IllegalArgumentException(ILLEGAL_DIMENSION);
         }
@@ -80,7 +80,7 @@ public class CommandParser {
      * @return a mower with its initial position and the commands to execute
      */
     private Mower buildMower(String mowerPosition, String mowerCommands) {
-        String[] mowerInitialPosition = mowerPosition.split(" ");
+        String[] mowerInitialPosition = mowerPosition.split("\\s+");
         if (mowerInitialPosition.length > 3) {
             throw new IllegalArgumentException(ILLEGAL_POSITION);
         }
