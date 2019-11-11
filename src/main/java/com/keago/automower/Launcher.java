@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /**
  * Automower launcher.
  * Get a list of commands and then call the mower
@@ -15,6 +18,7 @@ import java.util.stream.Stream;
  */
 public class Launcher {
 
+    private static final Logger LOGGER = LogManager.getLogger(Launcher.class);
     
     public static void main(String[] args) {
         ArrayList<String> commands = new ArrayList<String>(getMowerCommands(args));
@@ -34,9 +38,9 @@ public class Launcher {
         List<String> result = null;
         try (Stream<String> lines = Files.lines(Paths.get(args[0]))) {
             result = lines.collect(Collectors.toList());
-        } catch (IOException e) {
-            System.out.println("Failed to read file");
-            e.printStackTrace();
+        } catch (IOException exc) {
+            LOGGER.error("Failed to read file", exc);
+            throw new IllegalArgumentException("Failed to load file");
         }
         
         return result;

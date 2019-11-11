@@ -3,6 +3,9 @@ package com.keago.automower;
 import java.awt.Point;
 import java.util.ArrayList;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /**
  * An automower driven by short commands.
  *
@@ -11,6 +14,9 @@ public class Mower {
     private Point position;
     private MowerOrientation orientation;
     private final ArrayList<MowerDirection> commands;
+    
+    private static final Logger LOGGER = LogManager.getLogger(Mower.class);
+
 
     /**
      * Create a new mower with its position, its orientation, and the commands to apply.
@@ -35,7 +41,7 @@ public class Mower {
         for (MowerDirection direction : commands) {
             process(width, length, direction);
         }
-        System.out.println(this.position.x + " " + this.position.y + " " + this.orientation.getLabel());
+        LOGGER.info(this.position.x + " " + this.position.y + " " + this.orientation.getLabel());
     }
 
     /**
