@@ -9,6 +9,10 @@ public class Automow {
     private ArrayList<Mower> mowers = new ArrayList<Mower>();
 
     public Automow(String area) throws AutomowException {
+        if (isNullOrEmpty(area)) {
+            throw new AutomowException();
+        }
+        
         String[] lawnArea = area.split("\\s+");
         if (lawnArea.length > 2) {
             throw new AutomowException();
@@ -20,6 +24,10 @@ public class Automow {
     }
 
     public Automow addMower(String mowerPosition, String actions) throws AutomowException {
+        if (isNullOrEmpty(mowerPosition) || isNullOrEmpty(actions)) {
+            throw new AutomowException();
+        }
+        
         String[] mowerInitialPosition = mowerPosition.split("\\s+");
         if (actions.isEmpty() || mowerInitialPosition.length > 3) {
             throw new AutomowException();
@@ -59,6 +67,10 @@ public class Automow {
             throw new AutomowException();
         }
         return intValue;
+    }
+    
+    private Boolean isNullOrEmpty(String str) {
+        return (null == str || str.trim().isEmpty());
     }
 
     /**
