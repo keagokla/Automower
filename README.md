@@ -7,7 +7,8 @@ La position de la tondeuse est représentée par une combinaison de coordonnées
 
 Par exemple, la position de la tondeuse peut être « 0, 0, N », ce qui signifie qu'elle se situe dans le coin inférieur gauche de la pelouse, et orientée vers le Nord.
 
-Pour contrôler la tondeuse, on lui envoie une séquence simple de lettres. Les lettres possibles sont « D », « G » et « A ». « D » et « G » font pivoter la tondeuse de 90° à droite ou à gauche respectivement, sans la déplacer. « A » signifie que l'on avance la tondeuse d'une case dans la direction à laquelle elle fait face, et sans modifier son orientation.
+Pour contrôler la tondeuse, on lui envoie une séquence simple de lettres.
+Les lettres possibles sont « D », « G » et « A ». « D » et « G » font pivoter la tondeuse de 90° à droite ou à gauche respectivement, sans la déplacer. « A » signifie que l'on avance la tondeuse d'une case dans la direction à laquelle elle fait face, et sans modifier son orientation.
 
 Si la position après mouvement est en dehors de la pelouse, la tondeuse ne bouge pas, conserve son orientation et traite la commande suivante.
 
@@ -24,18 +25,27 @@ Chaque tondeuse se déplace de façon séquentielle, ce qui signifie que la seco
 Lorsqu'une tondeuse achève une série d'instruction, elle communique sa position et son orientation.
 
 OBJECTIF
+
 Concevoir et écrire un programme s'exécutant sur une JVM ou un serveur Node.js, et implémentant la spécification ci-dessus sous forme d'un endpoint HTTP et passant le test ci-après
 
 TEST
+
 La payload suivante est fourni en entrée :
+
 5 5
+
 1 2 N
+
 GAGAGAGAA
+
 3 3 E
+
 AADAADADDA
 
 On attend la payload suivante en réponse (position finale des tondeuses) :
+
 1 3 N
+
 5 1 E
 
 NB: Les données en entrée peuvent être injectées sous une autre forme qu'une payload (par exemple des tests automatisés).
@@ -46,6 +56,16 @@ NB: Les données en entrée peuvent être injectées sous une autre forme qu'une
 * Maven
 * Mockito
 
-## Compile
+## Package
 
-    $ mvn clean install
+    $ mvn clean package shade:shade
+    
+## Usage
+
+Lancer le service REST via la commande:
+
+    $ java -jar automower-1.0.jar
+    
+Puis à l'idée de votre client REST préféré, envoyer les actions à réaliser. Exemple avec cURL:
+
+    $ curl -H "Content-Type: application/json"   -X POST   --data '{"lawnArea": "5 5", "mowers": [{"position": "1 2 N", "actions": "GAGAGAGAA"}, {"position": "3 3 E", "actions": "AADAADADDA"}]}' http://localhost:8080/libon/mow

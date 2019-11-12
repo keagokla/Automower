@@ -1,49 +1,49 @@
 package com.keago.automower;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import com.keago.automower.ws.AutomowException;
+import com.keago.automower.ws.AutomowResource;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
+import org.glassfish.jersey.jackson.JacksonFeature;
+import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.server.ServerProperties;
+import org.glassfish.jersey.server.validation.ValidationFeature;
+import org.glassfish.jersey.servlet.ServletContainer;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
- * Automower launcher.
- * Get a list of commands and then call the mower
+ * Automow launcher.
  *
  */
-public class Launcher {
+public class Launcher {    
+    public static void main(String[] args) throws Exception {
+        ServletContextHandler sch = new ServletContextHandler();
+        sch.setContextPath("/");
 
-    private static final Logger LOGGER = LogManager.getLogger(Launcher.class);
-    
-    public static void main(String[] args) {
-        ArrayList<String> commands = new ArrayList<String>(getMowerCommands(args));
-        final CommandParser cp = new CommandParser();
-        final Lawn mowerLawn = cp.buildLawn(commands);
-        
-        for (Mower mower : mowerLawn.getMowers()) {
-            mower.mow(mowerLawn.getWidth(), mowerLawn.getLength());
-        }
-    }
+        ResourceConfig rc = new ResourceConfig()
+                // Now you can expect validation errors to be sent to the client.
+                .property(ServerProperties.BV_SEND_ERROR_IN_RESPONSE, true)
+                // @ValidateOnExecution annotations on subclasses won't cause errors.
+                .property(ServerProperties.BV_DISABLE_VALIDATE_ON_EXECUTABLE_OVERRIDE_CHECK, true);
+        rc.register(AutomowResource.class);
+        rc.register(ValidationFeature.class);
+        rc.register(JacksonFeature.class);
+        rc.register(AutomowException.class);
 
-    private static List<String> getMowerCommands(String[] args) {
-        if (args.length != 1) {
-            throw new IllegalArgumentException("Expected a file with the mower commands");
+        ServletContainer sc = new ServletContainer(rc);
+        ServletHolder holder = new ServletHolder(sc);
+        sch.addServlet(holder, "/*");
+
+        Server server = new Server(8080);
+        server.setHandler(sch);
+
+        try {
+            server.start();
+            server.join();
+        } finally {
+            server.destroy();
         }
-        
-        List<String> result = null;
-        try (Stream<String> lines = Files.lines(Paths.get(args[0]))) {
-            result = lines.collect(Collectors.toList());
-        } catch (IOException exc) {
-            LOGGER.error("Failed to read file", exc);
-            throw new IllegalArgumentException("Failed to load file");
-        }
-        
-        return result;
     }
 
 }

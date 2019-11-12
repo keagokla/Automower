@@ -8,6 +8,7 @@
 ### Eclipse project files ##
 .classpath
 .project
+.factorypath
 .settings/
 logs/
 

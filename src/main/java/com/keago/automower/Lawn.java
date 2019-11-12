@@ -1,39 +1,30 @@
 package com.keago.automower;
 
-import java.util.ArrayList;
+import com.keago.automower.ws.AutomowException;
+
 
 /**
  * Area that needs to be mowed.
  */
 public final class Lawn {
-    public static final String ILLEGAL_WIDTH = "You must specify a positive value for the lawn's width";
-    public static final String ILLEGAL_LENGTH = "You must specify a positive value for the lawn's width";
+    public static final String ILLEGAL_DIMENSION = "Expected positive values for the lawn's dimensions";
     private final int width;
     private final int length;
-    private final ArrayList<Mower> mowers;
 
     /**
-     * Create a new Lawn with its dimension and its mowers.
+     * Create a new Lawn with its dimension.
      * 
      * @param width Lawn's width
      * @param length Lawn's length
-     * @param mowers Lawn's mowers
+     * @throws AutomowException Exception ensuring the lawn's dimensions are positive integers
      */
-    public Lawn(int width, int length, ArrayList<Mower> mowers) {
-        if (width < 0) {
-            throw new IllegalArgumentException(ILLEGAL_WIDTH);
-        }
-        if (length < 0) {
-            throw new IllegalArgumentException(ILLEGAL_LENGTH);
+    public Lawn(int width, int length) throws AutomowException {
+        if (width < 0 || length < 0) {
+            throw new AutomowException(ILLEGAL_DIMENSION);
         }
 
         this.width = width;
         this.length = length;
-        this.mowers = mowers;
-    }
-
-    public ArrayList<Mower> getMowers() {
-        return mowers;
     }
 
     public int getWidth() {
