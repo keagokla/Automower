@@ -8,6 +8,7 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.ServerProperties;
+import org.glassfish.jersey.server.validation.ValidationFeature;
 import org.glassfish.jersey.servlet.ServletContainer;
 
 
@@ -23,6 +24,7 @@ public class Launcher {
         ResourceConfig rc = new ResourceConfig();
         rc.property(ServerProperties.BV_SEND_ERROR_IN_RESPONSE, true);
         rc.register(AutomowResource.class);
+        rc.register(ValidationFeature.class);
         rc.register(JacksonFeature.class);
         rc.register(AutomowException.class);
 
