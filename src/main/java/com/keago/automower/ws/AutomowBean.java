@@ -32,5 +32,5 @@ public final class AutomowBean {
 
     public void setMowers(ArrayList<MowerBean> mowers) {
         this.mowers = mowers;
-    }
+    }    
 }

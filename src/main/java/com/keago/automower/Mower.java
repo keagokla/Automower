@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-
 /**
  * An automower driven by short commands.
  *
@@ -27,8 +26,8 @@ public class Mower {
      * @param position    mower's position
      * @param orientation mower's orientation
      * @param commands    the commands that the mower must apply
-     * @throws AutomowException Exception ensuring the mower's position are
-     *                            positive integers
+     * @throws AutomowException Exception ensuring the mower's position are positive
+     *                          integers
      */
     public Mower(Point position, MowerOrientation orientation, ArrayList<MowerDirection> commands)
             throws AutomowException {

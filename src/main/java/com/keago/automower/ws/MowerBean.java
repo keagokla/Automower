@@ -34,6 +34,4 @@ public class MowerBean {
     public void setActions(String actions) {
         this.actions = actions;
     }
-
-
 }

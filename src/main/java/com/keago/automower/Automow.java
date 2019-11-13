@@ -12,7 +12,7 @@ public class Automow {
         if (isNullOrEmpty(area)) {
             throw new AutomowException();
         }
-        
+
         String[] lawnArea = area.split("\\s+");
         if (lawnArea.length > 2) {
             throw new AutomowException();
@@ -27,7 +27,7 @@ public class Automow {
         if (isNullOrEmpty(mowerPosition) || isNullOrEmpty(actions)) {
             throw new AutomowException();
         }
-        
+
         String[] mowerInitialPosition = mowerPosition.split("\\s+");
         if (actions.isEmpty() || mowerInitialPosition.length > 3) {
             throw new AutomowException();
@@ -68,7 +68,7 @@ public class Automow {
         }
         return intValue;
     }
-    
+
     private Boolean isNullOrEmpty(String str) {
         return (null == str || str.trim().isEmpty());
     }
@@ -85,7 +85,7 @@ public class Automow {
     private boolean isOutOfLawBounds(int lawnWidth, int lawnLength, Point position) {
         return (position.x < 0 || position.x > lawnWidth || position.y < 0 && position.y > lawnLength);
     }
-    
+
     public String mow() throws AutomowException {
         StringBuilder sb = new StringBuilder();
         if (mowers.isEmpty()) {
@@ -93,11 +93,20 @@ public class Automow {
         }
         for (Mower mower : mowers) {
             mower.mow(lawn.getWidth(), lawn.getLength());
-            sb.append(mower.getPosition().x + " " + mower.getPosition().y + " " + mower.getOrientation().getLabel());
-            sb.append(System.getProperty("line.separator"));
+
+            sb.append(mower.getPosition().x)
+                .append(" ")
+                .append(mower.getPosition().y)
+                .append(" ")
+                .append(mower.getOrientation().getLabel())
+                .append(System.getProperty("line.separator"));
         }
-        
+
         return sb.toString();
+    }
+    
+    public ArrayList<Mower> getMowers() {
+        return mowers;
     }
 
 }
